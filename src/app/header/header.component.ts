@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { Product } from '../product.model';
 
 @Component({
   selector: 'app-header',
@@ -6,5 +7,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./header.component.css']
 })
 export class HeaderComponent {
-  totalItems: number = 3
+
+  @Input() 
+  products: Product[];
+  
+
+  getTotal(){
+    let count = 0;
+    this.products.forEach(product => {
+      count += product.quantity;
+    });
+
+    return count;
+  }
 }

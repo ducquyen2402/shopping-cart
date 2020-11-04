@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Product } from '../product.model';
 
 @Component({
   selector: 'app-summary',
@@ -6,7 +7,23 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./summary.component.css']
 })
 export class SummaryComponent{
-  subTotal: number = 21.97
-  tax: number = this.subTotal * 10 / 100
-  total: number = this.subTotal + this.tax
+  @Input() promoCode: string;
+
+  applyPromoCode() {
+    if (this.promoCode === "HN123") {
+
+    }
+  }
+
+  @Input() 
+  products: Product[];
+
+  calculateSubTotal() {
+    let subTotal = 0;
+    this.products.forEach(product => {
+      subTotal += product.quantity * product.price
+    });
+    return subTotal;
+  }
+
 }
