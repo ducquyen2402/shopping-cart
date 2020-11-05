@@ -1,42 +1,78 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Product } from './product.model';
+import { ProductService } from './product.service';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  templateUrl: './app.component.html'
 })
-export class AppComponent {
-  title = 'angular-shopping-cart';
-  promoCode: string;
+export class AppComponent implements OnInit{
  
-  products : Product[] = [
-    {
-      id: 1,
-      name: "Product 01",
-      description: "abc",
-      image: "https://clickbuy.com.vn/uploads/2019/07/thumb_Note10_2.jpg",
-      price: 100000,
-      quantity: 2
-    },
-    {
-      id: 2,
-      name: "Product 02",
-      description: "xyz",
-      image: "https://clickbuy.com.vn/uploads/2019/07/thumb_Note10_2.jpg",
-      price: 200000,
-      quantity: 5
-    }
-  ]
+  products : Product[] = []
+  totalItems: number
+  subTotals: number
+  subTotalsApplySale: number = 0
+  vat: number
+  total: number
+  promoCode: string
+  saleOff: number = 0
 
-  removeProduct(id: number) {
-    const index = this.products.findIndex(product => product.id === id);
-    if (index !== -1 && confirm("Bạn muốn xóa sản phẩm có id = " + id + " ?")) {
-      this.products.splice(index, 1);
+  constructor(private productService: ProductService) {
+    this.products = this.productService.products
+  }
+
+  ngOnInit(){
+    this.totalItems = this.productService.getTotal(this.products);
+    this.subTotals = this.productService.calculateSubTotal();
+    this.vat = this.subTotals * 10/100;
+    this.total = this.subTotals + this.vat;
+  }
+
+  removeProduct(id){
+    if (confirm("Bạn muốn xóa sản phẩm có id = " + id + " ?")) {
+      this.productService.removeProduct(id);
+      this.totalItems = this.productService.getTotal(this.products);
+      this.updateSummary(this.saleOff);
     }
   }
 
-  // handleApplyPromoCode(data){
-  //   this.promoCode = data;
-  // }
+  updateQuantity(products: Product[]){
+    this.products = products;
+    this.totalItems = this.productService.getTotal(this.products);
+    this.updateSummary(this.saleOff);
+  }
+
+  applyPromoCode(promoCode){
+    if (promoCode.toLowerCase() === "HN10".toLowerCase()) {
+      alert("Chúc mừng! Bạn được giảm giá 10%")
+      // this.saleOff = this.subTotals * 10/100;
+      // this.subTotalsApplySale = this.subTotals - this.saleOff;
+      // this.vat = this.subTotalsApplySale * 10/100
+      // this.total = this.subTotalsApplySale + this.vat;
+      this.updateSummary(10);
+    } else if (promoCode.toLowerCase() === "HN20".toLowerCase()) {
+      alert("Chúc mừng! Bạn được giảm giá 20%")
+      // this.saleOff = this.subTotals*20/100;
+      // this.subTotalsApplySale = this.subTotals - this.saleOff;
+      // this.vat = this.subTotalsApplySale * 10/100
+      // this.total = this.subTotalsApplySale + this.vat;
+      this.updateSummary(20);
+    } else {
+      alert("Mã giảm giá không đúng hoặc hết hiệu lực!")
+      this.updateSummary(0);
+    }
+  }
+
+  updateSummary(saleOff: number){
+    this.saleOff = saleOff;
+    this.subTotals = this.productService.calculateSubTotal();
+    if (saleOff !== 0) {
+      this.subTotalsApplySale = this.subTotals - saleOff*this.subTotals/100;
+      this.vat = this.subTotalsApplySale * 10/100
+      this.total = this.subTotalsApplySale + this.vat;
+    } else {
+      this.vat = this.subTotals * 10/100;
+      this.total = this.subTotals + this.vat;
+    }
+  }
 }

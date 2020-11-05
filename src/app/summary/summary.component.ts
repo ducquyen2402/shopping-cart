@@ -7,23 +7,37 @@ import { Product } from '../product.model';
   styleUrls: ['./summary.component.css']
 })
 export class SummaryComponent{
-  @Input() promoCode: string;
-
-  applyPromoCode() {
-    if (this.promoCode === "HN123") {
-
-    }
-  }
-
+  promoCode: string;
   @Input() 
   products: Product[];
+  @Input()
+  subTotals: number;
+  @Input()
+  subTotalsApplySale: number;
+  @Input()
+  vat: number;
+  @Input()
+  total: number;
+  @Input()
+  saleOff: number
 
-  calculateSubTotal() {
-    let subTotal = 0;
-    this.products.forEach(product => {
-      subTotal += product.quantity * product.price
-    });
-    return subTotal;
+  @Output()
+  onApplyPromoCode = new EventEmitter();
+
+  applyPromoCode() {
+    // if (this.promoCode === "HN10") {
+    //   alert("Chúc mừng! Bạn được giảm giá 10%")
+    // }
+
+    this.onApplyPromoCode.emit(this.promoCode);
   }
+
+  // calculateSubTotal() {
+  //   let subTotal = 0;
+  //   this.products.forEach(product => {
+  //     subTotal += product.quantity * product.price
+  //   });
+  //   return subTotal;
+  // }
 
 }

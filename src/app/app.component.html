@@ -1,7 +1,7 @@
 <main>
-  <app-header [products]="products"></app-header>
+  <!-- <app-header [products]="products"></app-header> -->
 
-  <section class="container">
+  <!-- <section class="container">
     <ul class="products">
       <li class="row" *ngFor="let product of products">
         <div class="col left">
@@ -50,12 +50,32 @@
       </li>
 
     </ul>
-  </section>
+  </section> -->
 
   <!-- <app-summary
     (onApplyPromoCode)="handleApplyPromoCode($event)"
     [promoCode]="promoCode"
     [products]="products"
   > -->
-  <app-summary [products]="products"></app-summary>
+  <!-- <app-summary [products]="products"></app-summary> -->
+
+  <app-header
+    [totalItems]="totalItems"
+  >
+  </app-header>
+  <app-product 
+    [products]="products" 
+    (onRemoveProduct)="removeProduct($event)"
+    (onChangeQuantity)="updateQuantity($event)"
+  >
+  </app-product>
+  <app-summary 
+    [subTotals]="subTotals"
+    [subTotalsApplySale]="subTotalsApplySale"
+    [vat]="vat"
+    [saleOff]="saleOff"
+    [total]="total"
+    (onApplyPromoCode)="applyPromoCode($event)"
+  >
+  </app-summary>
 </main>

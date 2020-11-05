@@ -22,6 +22,7 @@
               type="number" class="quantity" step="1" value="2"
               #inputElement
               [(ngModel)] = "product.quantity"
+              (input) = "changeQuantity()"
             />
           </div>
 

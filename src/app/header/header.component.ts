@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Product } from '../product.model';
+import { InvokeFunctionExpr } from '@angular/compiler';
 
 @Component({
   selector: 'app-header',
@@ -8,16 +9,19 @@ import { Product } from '../product.model';
 })
 export class HeaderComponent {
 
-  @Input() 
-  products: Product[];
+  // @Input() 
+  // products: Product[];
+
+  @Input()
+  totalItems: number
   
 
-  getTotal(){
-    let count = 0;
-    this.products.forEach(product => {
-      count += product.quantity;
-    });
+  // getTotal(){
+  //   let count = 0;
+  //   this.products.forEach(product => {
+  //     count += product.quantity;
+  //   });
 
-    return count;
-  }
+  //   return count;
+  // }
 }

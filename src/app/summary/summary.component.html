@@ -11,9 +11,10 @@
 
     <div class="summary">
       <ul>
-        <li>Subtotal <span>${{ calculateSubTotal().toFixed(2) }}</span></li>
-        <li>Tax <span>${{ (calculateSubTotal()*10/100).toFixed(2) }}</span></li>
-        <li class="total">Total <span>${{ (calculateSubTotal()*110/100).toFixed(2) }}</span></li>
+        <li>Subtotal <span>{{ subTotals | currency: "VND" }}</span></li>
+        <li>Sale off <span>{{ subTotals*saleOff/100 | currency: "VND" }}</span></li>
+        <li>Tax <span>{{ vat | currency: "VND" }}</span></li>
+        <li class="total">Total <span>{{ total | currency: "VND" }}</span></li>
       </ul>
     </div>
 
