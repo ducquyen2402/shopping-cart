@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Product } from './product.model';
 import { ProductService } from './product.service';
+import { Summary } from './summary.model';
 
 @Component({
   selector: 'app-root',
@@ -9,53 +10,42 @@ import { ProductService } from './product.service';
 export class AppComponent implements OnInit{
  
   products : Product[] = []
+  summary: Summary
   totalItems: number
-  subTotals: number
-  subTotalsApplySale: number = 0
-  vat: number
-  total: number
   promoCode: string
-  saleOff: number = 0
 
   constructor(private productService: ProductService) {
     this.products = this.productService.products
+    this.summary = this.productService.summary
   }
 
   ngOnInit(){
     this.totalItems = this.productService.getTotal(this.products);
-    this.subTotals = this.productService.calculateSubTotal();
-    this.vat = this.subTotals * 10/100;
-    this.total = this.subTotals + this.vat;
+    this.summary.subTotals = this.productService.calculateSubTotal();
+    this.summary.vat = this.summary.subTotals * 10/100;
+    this.summary.total = this.summary.subTotals + this.summary.vat;
   }
 
   removeProduct(id){
     if (confirm("Bạn muốn xóa sản phẩm có id = " + id + " ?")) {
       this.productService.removeProduct(id);
       this.totalItems = this.productService.getTotal(this.products);
-      this.updateSummary(this.saleOff);
+      this.updateSummary(this.summary.saleOff);
     }
   }
 
   updateQuantity(products: Product[]){
     this.products = products;
     this.totalItems = this.productService.getTotal(this.products);
-    this.updateSummary(this.saleOff);
+    this.updateSummary(this.summary.saleOff);
   }
 
   applyPromoCode(promoCode){
     if (promoCode.toLowerCase() === "HN10".toLowerCase()) {
       alert("Chúc mừng! Bạn được giảm giá 10%")
-      // this.saleOff = this.subTotals * 10/100;
-      // this.subTotalsApplySale = this.subTotals - this.saleOff;
-      // this.vat = this.subTotalsApplySale * 10/100
-      // this.total = this.subTotalsApplySale + this.vat;
       this.updateSummary(10);
     } else if (promoCode.toLowerCase() === "HN20".toLowerCase()) {
       alert("Chúc mừng! Bạn được giảm giá 20%")
-      // this.saleOff = this.subTotals*20/100;
-      // this.subTotalsApplySale = this.subTotals - this.saleOff;
-      // this.vat = this.subTotalsApplySale * 10/100
-      // this.total = this.subTotalsApplySale + this.vat;
       this.updateSummary(20);
     } else {
       alert("Mã giảm giá không đúng hoặc hết hiệu lực!")
@@ -64,15 +54,21 @@ export class AppComponent implements OnInit{
   }
 
   updateSummary(saleOff: number){
-    this.saleOff = saleOff;
-    this.subTotals = this.productService.calculateSubTotal();
+    this.summary.saleOff = saleOff;
+    this.summary.subTotals = this.productService.calculateSubTotal();
     if (saleOff !== 0) {
-      this.subTotalsApplySale = this.subTotals - saleOff*this.subTotals/100;
-      this.vat = this.subTotalsApplySale * 10/100
-      this.total = this.subTotalsApplySale + this.vat;
+      this.summary.subTotalsApplySale = this.summary.subTotals - saleOff * this.summary.subTotals/100;
+      this.summary.vat = this.summary.subTotalsApplySale * 10/100
+      this.summary.total = this.summary.subTotalsApplySale + this.summary.vat;
     } else {
-      this.vat = this.subTotals * 10/100;
-      this.total = this.subTotals + this.vat;
+      this.summary.vat = this.summary.subTotals * 10/100;
+      this.summary.total = this.summary.subTotals + this.summary.vat;
     }
+  }
+
+  shopping() {
+    this.products = this.productService.productsInit
+    this.summary = this.productService.summary
+    this.ngOnInit();
   }
 }

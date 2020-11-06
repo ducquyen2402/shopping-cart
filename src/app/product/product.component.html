@@ -1,5 +1,5 @@
 <section class="container">
-    <ul class="products">
+    <ul class="products" *ngIf="products.length > 0">
       <li class="row" *ngFor="let product of products">
         <div class="col left">
           <div class="thumbnail">
@@ -19,7 +19,7 @@
         <div class="col right">
           <div class="quantity">
             <input 
-              type="number" class="quantity" step="1" value="2"
+              type="number" class="quantity" step="1" value="2" min="0"
               #inputElement
               [(ngModel)] = "product.quantity"
               (input) = "changeQuantity()"
@@ -46,6 +46,10 @@
           </div>
         </div>
       </li>
+    </ul>
 
+
+    <ul *ngIf="products.length === 0" style="text-align: center;">
+      <button class="btn-shop-now" (click)="shopNow()">Shop now</button>
     </ul>
   </section>

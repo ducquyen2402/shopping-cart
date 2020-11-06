@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Product } from './product.model';
+import { Summary } from './summary.model';
 
 @Injectable({ // cho cac class khac goi den
   providedIn: 'root' // pham vi hoat dong
@@ -23,6 +24,33 @@ export class ProductService {
       quantity: 1
     }
   ]
+
+  productsInit : Product[] = [
+    {
+      id: 1,
+      name: "Product 01",
+      description: "abc",
+      image: "https://clickbuy.com.vn/uploads/2019/07/thumb_Note10_2.jpg",
+      price: 100000,
+      quantity: 1
+    },
+    {
+      id: 2,
+      name: "Product 02",
+      description: "xyz",
+      image: "https://clickbuy.com.vn/uploads/2019/07/thumb_Note10_2.jpg",
+      price: 200000,
+      quantity: 1
+    }
+  ]
+
+  summary: Summary = {
+    subTotals: 0,
+    saleOff: 0,
+    subTotalsApplySale: 0,
+    vat: 0,
+    total: 0
+  }
   constructor() { }
 
   removeProduct(id){

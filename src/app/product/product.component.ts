@@ -17,6 +17,9 @@ export class ProductComponent{
   @Output()
   onChangeQuantity = new EventEmitter();
 
+  @Output()
+  onShopNow = new EventEmitter();
+
   removeProduct(id: number) {
     // const index = this.products.findIndex(product => product.id === id);
     // if (index !== -1 && confirm("Bạn muốn xóa sản phẩm có id = " + id + " ?")) {
@@ -28,6 +31,10 @@ export class ProductComponent{
 
   changeQuantity() {
     this.onChangeQuantity.emit(this.products)
+  }
+
+  shopNow(){
+    this.onShopNow.emit();
   }
 
 }
